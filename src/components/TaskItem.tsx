@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { CreateTaskInput, Task } from "../types/task";
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
 type TaskItemProps = {
   task: Task;
@@ -9,7 +10,7 @@ type TaskItemProps = {
   onUpdateTask: (taskId: number, input: CreateTaskInput) => void;
 };
 
-export function TaskItem({
+const TaskItem = React.memo(function TaskItem({
   task,
   onToggleTask,
   onDeleteTask,
@@ -90,4 +91,6 @@ export function TaskItem({
       <button onClick={() => navigate(`/tasks/${task.id}`)}>Details</button>
     </li>
   );
-}
+});
+
+export default TaskItem;

@@ -9,3 +9,5 @@ export type CreateTaskInput = {
   title: string;
   description: string;
 };
+
+export type TaskFilter = "all" | "active" | "completed";

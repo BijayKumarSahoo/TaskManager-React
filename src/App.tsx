@@ -29,7 +29,7 @@ function App() {
           element={
             <TasksPage
               tasks={tasks}
-              onToggleTaskCompletion={toggleTaskCompletion}
+              onToggleTask={toggleTaskCompletion}
               onDeleteTask={deleteTask}
               onUpdateTask={updateTask}
             />
