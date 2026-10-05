@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { CreateTaskInput, Task } from "../types/task";
+import { useNavigate } from "react-router-dom";
 
 type TaskItemProps = {
   task: Task;
@@ -17,6 +18,7 @@ export function TaskItem({
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
+  const navigate = useNavigate();
 
   function handleEdit() {
     setTitle(task.title);
@@ -85,6 +87,7 @@ export function TaskItem({
       </button>
       <button onClick={() => onDeleteTask(task.id)}>Delete</button>
       <button onClick={handleEdit}>Edit</button>
+      <button onClick={() => navigate(`/tasks/${task.id}`)}>Details</button>
     </li>
   );
 }

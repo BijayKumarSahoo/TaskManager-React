@@ -1,14 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { TaskForm } from "../components/TaskForm";
+import type { CreateTaskInput } from "../types/task";
 
-function NewTaskPage() {
-  const navigate = useNavigate();
-
-  function handleCreated() {
-    // create task
-
-    navigate("/tasks");
-  }
-
-  return <button onClick={handleCreated}>Create</button>;
+export default function NewTaskPage({
+  onAddTask,
+}: {
+  onAddTask: (task: CreateTaskInput) => void;
+}) {
+  return <TaskForm onAddTask={onAddTask} />;
 }
-export default NewTaskPage;

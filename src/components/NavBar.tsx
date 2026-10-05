@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { ProfileMenu } from "./ProfileMenu";
 
 function Navbar() {
   return (
@@ -31,6 +32,8 @@ function Navbar() {
       >
         Settings
       </NavLink>
+      {" | "}
+      <ProfileMenu />
     </nav>
   );
 }

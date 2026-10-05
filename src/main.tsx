@@ -3,11 +3,38 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
+import { UserContext } from "./context/UserContext.tsx";
+import { ThemeContext, useTheme } from "./context/ThemeContext.tsx";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StrictMode>,
-);
+// createRoot(document.getElementById("root")!).render(
+//   <StrictMode>
+//     <ThemeContext.Provider
+//       value={{
+//         theme,
+//         toggleTheme,
+//       }}>
+//       <UserContext.Provider value={{ id: 1, name: "John Doe" }}>
+//         <BrowserRouter>
+//           <App />
+//         </BrowserRouter>
+//       </UserContext.Provider>
+//     </ThemeContext.Provider>
+//   </StrictMode>,
+// );
+export function Root() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <StrictMode>
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <UserContext.Provider value={{ id: 1, name: "John Doe" }}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </UserContext.Provider>
+      </ThemeContext.Provider>
+    </StrictMode>
+  );
+}
+
+createRoot(document.getElementById("root")!).render(<Root />);
