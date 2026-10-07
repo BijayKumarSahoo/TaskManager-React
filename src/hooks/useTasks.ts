@@ -33,19 +33,27 @@ export function useTasks() {
   }
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function loadTasks() {
       dispatch({
         type: "tasks/loading",
       });
 
       try {
-        const tasks = await getTasks();
+        const tasks = await getTasks(controller.signal);
 
         dispatch({
           type: "tasks/loaded",
           payload: tasks,
         });
-      } catch {
+      } catch (error) {
+        console.log(error);
+        if (error instanceof DOMException && error.name === "AbortError") {
+          console.log("Aborted");
+          return;
+        }
+
         dispatch({
           type: "tasks/loadFailed",
           payload: "Failed to load tasks.",
@@ -54,7 +62,11 @@ export function useTasks() {
     }
 
     loadTasks();
-  }, []);
+
+    return () => {
+      controller.abort();
+    };
+  }, []); // [searchTerm] -> dependency to abort previous call
 
   return {
     tasks: state.tasks,

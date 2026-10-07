@@ -21,8 +21,19 @@ const initialTasks: Task[] = [
   },
 ];
 
-export async function getTasks(): Promise<Task[]> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+export async function getTasks(signal?: AbortSignal): Promise<Task[]> {
+  await new Promise<void>((resolve, reject) => {
+    const timeoutId = setTimeout(resolve, 5000);
+    signal?.addEventListener(
+      "abort",
+      () => {
+        clearTimeout(timeoutId);
+
+        reject(new DOMException("Request aborted", "AbortError"));
+      },
+      { once: true },
+    );
+  });
 
   return initialTasks;
 }
