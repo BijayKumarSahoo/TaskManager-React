@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import type { CreateTaskInput, Task } from "../types/task";
+import { taskReducer, type TaskState } from "./taskReducer";
 
-export function useTasks() {
-  const [tasks, setTasks] = useState<Task[]>([
+const initialState: TaskState = {
+  tasks: [
     {
       id: 1,
       title: "Learn React",
@@ -21,47 +22,34 @@ export function useTasks() {
       description: "Use TypeScript effectively with React",
       completed: true,
     },
-  ]);
+  ],
+};
+
+export function useTasks() {
+  const [state, dispatch] = useReducer(taskReducer, initialState);
 
   function addTask(input: CreateTaskInput) {
-    const newTask: Task = {
-      id: Date.now(),
-      title: input.title,
-      description: input.description,
-      completed: false,
-    };
-
-    setTasks((prevTasks) => [...prevTasks, newTask]);
+    dispatch({ type: "task/added", payload: input });
   }
 
   function updateTask(taskId: number, input: CreateTaskInput) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId
-          ? { ...task, title: input.title, description: input.description }
-          : task,
-      ),
-    );
+    dispatch({ type: "task/updated", payload: { taskId, input } });
   }
 
   function deleteTask(taskId: number) {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    dispatch({ type: "task/deleted", payload: taskId });
   }
 
   function toggleTaskCompletion(taskId: number) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task,
-      ),
-    );
+    dispatch({ type: "task/toggled", payload: taskId });
   }
 
   function getTaskById(taskId: number): Task | undefined {
-    return tasks.find((task) => task.id === taskId);
+    return state.tasks.find((task) => (task.id = taskId));
   }
 
   return {
-    tasks,
+    tasks: state.tasks,
     addTask,
     updateTask,
     deleteTask,
