@@ -12,6 +12,8 @@ import { useTasks } from "./hooks/useTasks";
 function App() {
   const {
     tasks,
+    status,
+    error,
     addTask,
     updateTask,
     deleteTask,
@@ -29,6 +31,8 @@ function App() {
           element={
             <TasksPage
               tasks={tasks}
+              status={status}
+              error={error}
               onToggleTask={toggleTaskCompletion}
               onDeleteTask={deleteTask}
               onUpdateTask={updateTask}

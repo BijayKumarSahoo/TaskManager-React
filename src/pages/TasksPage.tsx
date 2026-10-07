@@ -4,6 +4,8 @@ import type { CreateTaskInput, Task, TaskFilter } from "../types/task";
 
 type TasksPageProps = {
   tasks: Task[];
+  status: "idle" | "loading" | "success" | "error";
+  error: string | null;
   onToggleTask: (taskId: number) => void;
   onDeleteTask: (taskId: number) => void;
   onUpdateTask: (taskId: number, input: CreateTaskInput) => void;
@@ -11,6 +13,8 @@ type TasksPageProps = {
 
 function TasksPage({
   tasks,
+  status,
+  error,
   onToggleTask,
   onDeleteTask,
   onUpdateTask,
@@ -30,6 +34,19 @@ function TasksPage({
         return tasks;
     }
   }, [tasks, filter]);
+
+  if (status === "loading") {
+    return <p>Loading Tasks</p>;
+  }
+
+  if (status === "error") {
+    return (
+      <>
+        <h2>Something went wrong</h2>
+        <p>{error}</p>
+      </>
+    );
+  }
 
   return (
     <>

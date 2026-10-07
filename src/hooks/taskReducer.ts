@@ -2,9 +2,22 @@ import type { CreateTaskInput, Task } from "../types/task";
 
 export type TaskState = {
   tasks: Task[];
+  status: "idle" | "loading" | "success" | "error";
+  error: string | null;
 };
 
 export type TaskAction =
+  | {
+      type: "tasks/loading";
+    }
+  | {
+      type: "tasks/loaded";
+      payload: Task[];
+    }
+  | {
+      type: "tasks/loadFailed";
+      payload: string;
+    }
   | {
       type: "task/added";
       payload: CreateTaskInput;
@@ -27,6 +40,28 @@ export type TaskAction =
 
 export function taskReducer(state: TaskState, action: TaskAction): TaskState {
   switch (action.type) {
+    case "tasks/loading":
+      return {
+        ...state,
+        status: "loading",
+        error: null,
+      };
+
+    case "tasks/loaded":
+      return {
+        ...state,
+        tasks: action.payload,
+        status: "success",
+        error: null,
+      };
+
+    case "tasks/loadFailed":
+      return {
+        ...state,
+        status: "error",
+        error: action.payload,
+      };
+
     case "task/added": {
       const newTask: Task = {
         id: Date.now(),
