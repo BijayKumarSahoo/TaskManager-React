@@ -1,24 +1,14 @@
 import { useMemo, useState } from "react";
 import { TaskList } from "../components/TaskList";
-import type { CreateTaskInput, Task, TaskFilter } from "../types/task";
+import type { Task, TaskFilter } from "../types/task";
 
 type TasksPageProps = {
   tasks: Task[];
-  status: "idle" | "loading" | "success" | "error";
-  error: string | null;
-  onToggleTask: (taskId: number) => void;
-  onDeleteTask: (taskId: number) => void;
-  onUpdateTask: (taskId: number, input: CreateTaskInput) => void;
+  status: "pending" | "success" | "error";
+  error: Error | null;
 };
 
-function TasksPage({
-  tasks,
-  status,
-  error,
-  onToggleTask,
-  onDeleteTask,
-  onUpdateTask,
-}: TasksPageProps) {
+function TasksPage({ tasks, status, error }: TasksPageProps) {
   const [filter, setFilter] = useState<TaskFilter>("all");
 
   const filteredTasks = useMemo(() => {
@@ -35,7 +25,7 @@ function TasksPage({
     }
   }, [tasks, filter]);
 
-  if (status === "loading") {
+  if (status === "pending") {
     return <p>Loading Tasks</p>;
   }
 
@@ -43,7 +33,7 @@ function TasksPage({
     return (
       <>
         <h2>Something went wrong</h2>
-        <p>{error}</p>
+        <p>{error?.message}</p>
       </>
     );
   }
@@ -60,12 +50,7 @@ function TasksPage({
       {tasks.length === 0 ? (
         <p>No tasks available.</p>
       ) : (
-        <TaskList
-          tasks={filteredTasks}
-          onToggleTask={onToggleTask}
-          onDeleteTask={onDeleteTask}
-          onUpdateTask={onUpdateTask}
-        />
+        <TaskList tasks={filteredTasks} />
       )}
     </>
   );

@@ -1,41 +1,22 @@
 import { useState } from "react";
-import type { CreateTaskInput, Task } from "../types/task";
+import type { Task } from "../types/task";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 
 type TaskItemProps = {
   task: Task;
-  onToggleTask: (taskId: number) => void;
-  onDeleteTask: (taskId: number) => void;
-  onUpdateTask: (taskId: number, input: CreateTaskInput) => void;
 };
 
-const TaskItem = React.memo(function TaskItem({
-  task,
-  onToggleTask,
-  onDeleteTask,
-  onUpdateTask,
-}: TaskItemProps) {
+const TaskItem = React.memo(function TaskItem({ task }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
   const navigate = useNavigate();
 
-  function handleEdit() {
-    setTitle(task.title);
-    setDescription(task.description);
-    setIsEditing(true);
-  }
-
   function handleSave() {
     if (!title.trim()) {
       return;
     }
-
-    onUpdateTask(task.id, {
-      title: title.trim(),
-      description: description.trim(),
-    });
 
     setIsEditing(false);
   }
@@ -83,11 +64,6 @@ const TaskItem = React.memo(function TaskItem({
       </h3>
       <p>{task.description}</p>
       <p>Status: {task.completed ? "Completed" : "Pending"}</p>
-      <button onClick={() => onToggleTask(task.id)}>
-        {task.completed ? "Mark Incomplete" : "Mark Complete"}
-      </button>
-      <button onClick={() => onDeleteTask(task.id)}>Delete</button>
-      <button onClick={handleEdit}>Edit</button>
       <button onClick={() => navigate(`/tasks/${task.id}`)}>Details</button>
     </li>
   );

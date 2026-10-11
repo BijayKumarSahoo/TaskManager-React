@@ -1,25 +1,13 @@
 import { Routes, Route } from "react-router-dom";
-
 import HomePage from "./pages/HomePage";
 import TasksPage from "./pages/TasksPage";
-import NewTaskPage from "./pages/NewTaskPage";
 import SettingsPage from "./pages/SettingsPage";
 import Navbar from "./components/NavBar";
-import TaskDetailsPage from "./pages/TaskDetailsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { useTasks } from "./hooks/useTasks";
 
 function App() {
-  const {
-    tasks,
-    status,
-    error,
-    addTask,
-    updateTask,
-    deleteTask,
-    toggleTaskCompletion,
-    getTaskById,
-  } = useTasks();
+  const { tasks, status, error } = useTasks();
   return (
     <>
       <Navbar />
@@ -28,28 +16,10 @@ function App() {
 
         <Route
           path="/tasks"
-          element={
-            <TasksPage
-              tasks={tasks}
-              status={status}
-              error={error}
-              onToggleTask={toggleTaskCompletion}
-              onDeleteTask={deleteTask}
-              onUpdateTask={updateTask}
-            />
-          }
-        />
-
-        <Route
-          path="/tasks/new"
-          element={<NewTaskPage onAddTask={addTask} />}
+          element={<TasksPage tasks={tasks} status={status} error={error} />}
         />
 
         <Route path="/settings" element={<SettingsPage />} />
-        <Route
-          path="/tasks/:id"
-          element={<TaskDetailsPage getTaskById={getTaskById} />}
-        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>

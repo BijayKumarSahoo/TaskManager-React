@@ -1,19 +1,11 @@
-import type { CreateTaskInput, Task } from "../types/task";
+import type { Task } from "../types/task";
 import TaskItem from "./TaskItem";
 
 type TaskListProps = {
   tasks: Task[];
-  onToggleTask: (taskId: number) => void;
-  onDeleteTask: (taskId: number) => void;
-  onUpdateTask: (taskId: number, input: CreateTaskInput) => void;
 };
 
-export function TaskList({
-  tasks,
-  onToggleTask,
-  onDeleteTask,
-  onUpdateTask,
-}: TaskListProps) {
+export function TaskList({ tasks }: TaskListProps) {
   if (tasks.length === 0) {
     return <p>No tasks found.</p>;
   }
@@ -21,13 +13,7 @@ export function TaskList({
   return (
     <ul>
       {tasks.map((task) => (
-        <TaskItem
-          task={task}
-          key={task.id}
-          onToggleTask={onToggleTask}
-          onDeleteTask={onDeleteTask}
-          onUpdateTask={onUpdateTask}
-        />
+        <TaskItem task={task} key={task.id} />
       ))}
     </ul>
   );
